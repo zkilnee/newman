@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "1dfdedcd-57da-426b-ac36-1356bedfd2bc",
+		"name": "DemoAPITest2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "category1",
+			"description": "",
+			"item": [
+				{
+					"name": "https://jsonplaceholder.typicode.com/posts/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "298216bf-4844-49d5-9ef2-a626bbaadc81",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"      ",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+									"",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Status code name has string\", function () {",
+									"    pm.response.to.have.status(\"test\");",
+									"    ",
+									"",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/comments?postId=1",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"comments"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api script demo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4cfe5003-06b3-4fa9-a867-b19b20ddbdc8",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"numAPIs1\");",
+									"    console.log(\"test body matches string\");",
+									"",
+									"});",
+									"",
+									"pm.test(\"numAPIs\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(pm.response.json().numAPIs).to.above(10);",
+									"    console.log(\"test num api\");",
+									"",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(50);",
+									"        console.log(\"response time check\");",
+									"",
+									"",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://api.apis.guru/v2/metrics.json",
+							"protocol": "https",
+							"host": [
+								"api",
+								"apis",
+								"guru"
+							],
+							"path": [
+								"v2",
+								"metrics.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category2",
+			"description": "",
+			"item": [
+				{
+					"name": "https://jsonplaceholder.typicode.com/posts/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d08218c0-ec3f-4a0b-8496-edf63bc8efd6",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"check value\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(pm.response.json().userId).to.eql(1);",
+									"});",
+									"",
+									"pm.test(\"check response has json body \", function () {",
+									"pm.response.to.have.jsonBody();",
+									" ",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://jsonplaceholder.typicode.com/posts/1",
+							"protocol": "https",
+							"host": [
+								"jsonplaceholder",
+								"typicode",
+								"com"
+							],
+							"path": [
+								"posts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "https://api.apis.guru/v2/list.json",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2c889eed-9e34-4e0a-a8d3-094170071afd",
+								"type": "text/javascript",
+								"exec": [
+									"// example using pm.response.to.have",
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"   ",
+									"});",
+									"",
+									"",
+									"",
+									"// example using response assertions",
+									"pm.test(\"response should be okay to process\", function () { ",
+									"    pm.response.to.not.be.error; ",
+									"    pm.response.to.have.jsonBody(\"\"); ",
+									"    pm.response.to.not.have.jsonBody(\"error\"); ",
+									"   ",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://api.apis.guru/v2/list.json",
+							"protocol": "https",
+							"host": [
+								"api",
+								"apis",
+								"guru"
+							],
+							"path": [
+								"v2",
+								"list.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
