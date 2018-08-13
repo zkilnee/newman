@@ -6,37 +6,57 @@
 	},
 	"item": [
 		{
+			"_postman_id": "e98a342f-0ecf-49fc-bd96-9202b639f324",
 			"name": "category1",
-			"description": "",
 			"item": [
 				{
-					"name": "https://jsonplaceholder.typicode.com/posts/1",
+					"_postman_id": "aca96baf-6582-48c2-834d-654e2ab574c1",
+					"name": "TestCase TFT_001 https://jsonplaceholder.typicode.com/posts/1",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "298216bf-4844-49d5-9ef2-a626bbaadc81",
+								"id": "bc389c8e-edb9-4d1c-bf3c-7e6b68af6b5b",
 								"type": "text/javascript",
 								"exec": [
-									"pm.test(\"Content-Type is present\", function () {",
+									"// testing content type for request jsonplaceholder",
+									"",
+									"pm.test(\"TFT_001:Req_001 Content-Type is present\", function (err) {",
 									"    pm.response.to.have.header(\"Content-Type\");",
-									"      ",
+									"     if (err) {",
+									"        console.log(err);",
+									"    }",
 									"});",
 									"",
 									"",
 									"",
-									"pm.test(\"Successful POST request\", function () {",
+									"pm.test(\"TFT_001:Req_002 Successful POST request\", function () {",
 									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+									"    console.log(\"error printed 1\");",
+									"    pm.print()",
 									"",
 									"});",
 									"",
 									"",
 									"",
-									"pm.test(\"Status code name has string\", function () {",
+									"pm.test(\"TFT_001:Req_003 Status code name has string\", function () {",
 									"    pm.response.to.have.status(\"test\");",
+									"    console.log(\"error printed\");",
 									"    ",
 									"",
+									"console.log(\"error printed\");",
 									"});"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "05f10f2c-621b-4c8e-a8e3-9b91a53bc0df",
+								"type": "text/javascript",
+								"exec": [
+									"pm.cookies.clear();",
+									""
 								]
 							}
 						}
@@ -46,7 +66,7 @@
 						"header": [],
 						"body": {},
 						"url": {
-							"raw": "https://jsonplaceholder.typicode.com/comments?postId=1",
+							"raw": "https://jsonplaceholder.typicode.com/comments?postId={{postId}}",
 							"protocol": "https",
 							"host": [
 								"jsonplaceholder",
@@ -59,7 +79,7 @@
 							"query": [
 								{
 									"key": "postId",
-									"value": "1"
+									"value": "{{postId}}"
 								}
 							]
 						}
@@ -67,33 +87,86 @@
 					"response": []
 				},
 				{
-					"name": "api script demo",
+					"_postman_id": "02eac900-d602-4a8a-bf1d-ee05e6d79122",
+					"name": "TestCase TFT_002 : api script demo",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "4cfe5003-06b3-4fa9-a867-b19b20ddbdc8",
+								"id": "0f67f50b-84ea-41db-9a49-36de919f2852",
 								"type": "text/javascript",
 								"exec": [
-									"pm.test(\"Body matches string\", function () {",
+									"",
+									"pm.test(\" TFT_002:Req_001 : Req_Body matches string\", function () {",
 									"    pm.expect(pm.response.text()).to.include(\"numAPIs1\");",
 									"    console.log(\"test body matches string\");",
 									"",
 									"});",
 									"",
-									"pm.test(\"numAPIs\", function () {",
+									"pm.test(\" TFT_002:Req_002 : numAPIs\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(pm.response.json().numAPIs).to.above(10);",
 									"    console.log(\"test num api\");",
 									"",
 									"});",
 									"",
-									"pm.test(\"Response time is less than 200ms\", function () {",
+									"pm.test(\"TFT_002:Req_003 :  Response time is less than 200ms\", function () {",
 									"    pm.expect(pm.response.responseTime).to.be.below(50);",
 									"        console.log(\"response time check\");",
 									"",
 									"",
-									"});"
+									"});",
+									"",
+									"pm.test(\"TFT_002:Req_004  numAPIs\", function (){",
+									"    var jsonData = pm.response.json();",
+									"     console.log(\"test num api 3#########\");",
+									"    pm.expect(pm.response.json().numAPIes).to.above(10);",
+									" ",
+									"});",
+									"",
+									"function retryOnFailure(successCode, numberOfRetrys) {",
+									"    var key = request.name + '_counter';",
+									"    var execCounter = postman.getEnvironmentVariable(key) || 1;",
+									"",
+									"    var sleepDuration = 1000;",
+									"    var waitUntilTime = new Date().getTime() + sleepDuration;",
+									"    if (responseCode.code !== successCode && execCounter <= numberOfRetrys) {",
+									"        while (new Date().getTime() < waitUntilTime) {",
+									"            // Do Nothing -> Wait",
+									"        }",
+									"        console.log('Retrying: ' + request.name + '\\nGot: ' + responseCode.code + ' Expected: ' + successCode + '\\nWaited: ' + sleepDuration / 1000 + 'sec  \\nRetry Number: ' + execCounter + ' of ' + numberOfRetrys);",
+									"        execCounter++;",
+									"        postman.setEnvironmentVariable(key, execCounter);",
+									"        postman.setNextRequest(request.name);",
+									"    }",
+									"}",
+									"",
+									"retryOnFailure(200,3);",
+									"",
+									"",
+									"/*const code = (responseCode.code === 200);",
+									"",
+									"if (code === 200 && environment.counter < 3) {",
+									"    // Stop execution",
+									"    tests[\"Status code is 200\"] = code;",
+									"    postman.setNextRequest();",
+									"}",
+									"else {",
+									"    // retry the same request",
+									"    postman.setNextRequest(\"api script demo\");",
+									"}*/",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3387a810-cd65-427e-811d-a6ddea15ffac",
+								"type": "text/javascript",
+								"exec": [
+									"pm.cookies.clear();",
+									""
 								]
 							}
 						}
@@ -106,8 +179,8 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://api.apis.guru/v2/metrics.json",
-							"protocol": "https",
+							"raw": "http://api.apis.guru/v2/metrics.json",
+							"protocol": "http",
 							"host": [
 								"api",
 								"apis",
@@ -120,28 +193,108 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "category2",
-			"description": "",
-			"item": [
+				},
 				{
-					"name": "https://jsonplaceholder.typicode.com/posts/1",
+					"_postman_id": "b93432d0-bcfc-4865-8ece-35be22b6ac68",
+					"name": "TestCase TFT_003 api not found",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "d08218c0-ec3f-4a0b-8496-edf63bc8efd6",
+								"id": "6328faa8-0ee1-47da-81bd-d40baddf121e",
 								"type": "text/javascript",
 								"exec": [
-									"pm.test(\"check value\", function () {",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"if (responseCode.code === 200 ) {",
+									"    // Stop execution",
+									"    tests[\"Status code is 200\"] = code;",
+									"        pm.expect(pm.response.responseTime).to.be.below(200);",
+									"",
+									"    console.log(\"postman.getEnvironmentVariable('RetryCounter') \"+postman.getEnvironmentVariable('RetryCounter') );",
+									"        postman.setEnvironmentVariable(\"RetryCounter\", 0);",
+									"    postman.setNextRequest();",
+									"    ",
+									"}else if ( postman.getEnvironmentVariable('RetryCounter') < 4){",
+									"    // retry the same request",
+									"    pm.test(\"test response code\",function(){",
+									"",
+									"        console.log(\"request fail\");",
+									"        postman.setNextRequest(\"TestCase TFT_003 api not found\");",
+									"        pm.expect(pm.response.to.be.ok);",
+									"})",
+									"",
+									"}else {",
+									"    postman.setEnvironmentVariable(\"RetryCounter\", 0);",
+									"pm.expect(pm.response.to.be.ok);",
+									"",
+									"    postman.setNextRequest();",
+									"",
+									"}",
+									"});",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "09f5c276-6839-46cd-9c45-18fe8c17690e",
+								"type": "text/javascript",
+								"exec": [
+									"var counter = postman.getEnvironmentVariable('RetryCounter') ? _.parseInt(postman.getEnvironmentVariable('RetryCounter') ) + 1 : 1;",
+									"postman.setEnvironmentVariable(\"RetryCounter\", counter);",
+									"console.log(\"counter\"+counter);",
+									"console.log(\"RetryCounter\"+ postman.getEnvironmentVariable('RetryCounter'));",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://reqres.in/api/unknown/23",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"unknown",
+								"23"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "fcab6f0c-cecc-45f8-acd4-0694526de073",
+			"name": "category2",
+			"item": [
+				{
+					"_postman_id": "732c88e2-a5a9-4999-af35-d90d07f14277",
+					"name": "TFT_004 https://jsonplaceholder.typicode.com/posts/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ac8c1732-4208-46c1-897c-36861f7b03d5",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"TFT_004:Req_001 check value\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(pm.response.json().userId).to.eql(1);",
 									"});",
 									"",
-									"pm.test(\"check response has json body \", function () {",
+									"pm.test(\"TFT_004:Req_002 check response has json body \", function () {",
 									"pm.response.to.have.jsonBody();",
 									" ",
 									"});",
@@ -172,16 +325,17 @@
 					"response": []
 				},
 				{
-					"name": "https://api.apis.guru/v2/list.json",
+					"_postman_id": "1dc2ea16-9acb-4b39-a37b-d6dcbc84beda",
+					"name": "TestCase TFT_005 https://api.apis.guru/v2/list.json",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "2c889eed-9e34-4e0a-a8d3-094170071afd",
+								"id": "aa89928b-5259-452d-b426-79d24eb1c9a1",
 								"type": "text/javascript",
 								"exec": [
 									"// example using pm.response.to.have",
-									"pm.test(\"response is ok\", function () {",
+									"pm.test(\"TFT_005:Req_001 response is ok\", function () {",
 									"    pm.response.to.have.status(200);",
 									"   ",
 									"});",
@@ -189,7 +343,7 @@
 									"",
 									"",
 									"// example using response assertions",
-									"pm.test(\"response should be okay to process\", function () { ",
+									"pm.test(\"TFT_005:Req_002 response should be okay to process\", function () { ",
 									"    pm.response.to.not.be.error; ",
 									"    pm.response.to.have.jsonBody(\"\"); ",
 									"    pm.response.to.not.have.jsonBody(\"error\"); ",
